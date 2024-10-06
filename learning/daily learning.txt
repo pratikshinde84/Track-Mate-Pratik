@@ -1,0 +1,3 @@
+I replaced Arrays.toString(ar) with String.join(" ", ar) to join the array elements into a single string with spaces between words.
+
+The split("\\s+") is used to handle multiple spaces between words.

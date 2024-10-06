@@ -1,0 +1,24 @@
+<!-- res/drawable/button_shape.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Gradient background -->
+    <gradient
+        android:angle="45"
+        android:startColor="#4CAF50"
+        android:endColor="#81C784" />
+
+    <!-- Rounded corners -->
+    <corners
+        android:radius="16dp" />
+
+    <!-- Border around the button -->
+    <stroke
+        android:width="2dp"
+        android:color="#388E3C" />
+
+    <!-- Padding inside the button -->
+    <padding
+        android:left="10dp"
+        android:top="10dp"
+        android:right="10dp"
+        android:bottom="10dp" />
+</shape>

@@ -1,0 +1,57 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Exception Handling and Session Management in JSP</title>
+</head>
+<body>
+    <h1>Exception Handling and Session Management in JSP</h1>
+    <form action="ExceptionHandler.jsp" method="post">
+        Enter Data: <input type="text" name="data">
+        <input type="submit" value="Submit">
+    </form>
+    
+    <%@ page import="java.io.*" %>
+    <%@ page import="javax.servlet.*" %>
+    <%@ page import="javax.servlet.http.*" %>
+    
+    <%
+        try {
+            // Accessing session
+            HttpSession session = request.getSession();
+
+            // Retrieving data from the form
+            String data = request.getParameter("data");
+
+            // Storing data in session
+            session.setAttribute("data", data);
+
+            // Simulating a potential exception
+            if ("error".equals(data)) {
+                throw new Exception("Simulated error occurred!");
+            }
+
+            // Sending success message
+            out.println("<p>Data stored successfully!</p>");
+        } catch (Exception e) {
+            // Handling exception
+            out.println("<p>An error occurred: " + e.getMessage() + "</p>");
+        }
+    %>
+
+    <%-- Displaying data retrieved from session --%>
+    <%
+        // Accessing session
+        HttpSession session = request.getSession();
+
+        // Retrieving data from session
+        String data = (String) session.getAttribute("data");
+
+        if (data != null) {
+            out.println("<h2>Data retrieved from session:</h2>");
+            out.println("<p>" + data + "</p>");
+        }
+    %>
+</body>
+</html>
