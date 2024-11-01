@@ -1,6 +1,8 @@
 package com.example.track_mate;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -9,6 +11,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,12 +22,17 @@ import java.util.concurrent.Executor;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
+    private static final int REQUEST_CODE_SMS = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        NotificationHelper.createNotificationChannel(this);
+
+        checkSmsPermission();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -80,5 +88,32 @@ public class LoginActivity extends AppCompatActivity {
 
         // Start the biometric authentication process
         biometricPrompt.authenticate(promptInfo);
+    }
+
+    private void checkSmsPermission() {
+        // Check if SMS permission is granted
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+            // Request SMS permission
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, REQUEST_CODE_SMS);
+        } else {
+            // Permission already granted, proceed with your logic
+            Log.d(TAG, "SMS permission already granted.");
+        }
+    }
+
+    // Handle permission result
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_SMS) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted
+                Log.d(TAG, "SMS permission granted.");
+            } else {
+                // Permission denied
+                Log.d(TAG, "SMS permission denied.");
+                Toast.makeText(this, "SMS permission is required for this app.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

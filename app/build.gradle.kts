@@ -39,6 +39,8 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation("androidx.biometric:biometric:1.1.0")
     implementation ("com.airbnb.android:lottie:6.0.1")
+    implementation ("androidx.core:core:1.10.0")
+    implementation ("com.itextpdf:itext7-core:7.1.16")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

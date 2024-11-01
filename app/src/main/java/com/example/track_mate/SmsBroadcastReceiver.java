@@ -1,11 +1,14 @@
 package com.example.track_mate;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+
+import androidx.core.app.NotificationCompat;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,7 +27,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
 
                     // Check for "debited" in the message
                     if (messageBody.toLowerCase().contains("debited")) {
-                        // Extract amount, date, and receiver
+                        // Extract amount and process transaction
                         processTransaction(context, messageBody);
                     }
                 }
@@ -47,14 +50,29 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
                 float totalSpent = sharedPreferences.getFloat("total_spent", 0);
                 totalSpent += amount;
 
-                // Save updated total in SharedPreferences
                 sharedPreferences.edit().putFloat("total_spent", (float) totalSpent).apply();
 
-                // Optionally, notify the UI (you may need to implement a method to refresh UI)
-                // Example: ((MainActivity) context).updateUI();
+                // Check if total spent exceeds budget and send notification
+                checkBudgetAndNotify(context, totalSpent);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private void checkBudgetAndNotify(Context context, float totalSpent) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("BudgetPrefs", Context.MODE_PRIVATE);
+        float budget = sharedPreferences.getFloat("budget", 0); // Get your budget limit from SharedPreferences
+
+        if (totalSpent > budget) {
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "budget_notification_channel")
+                    .setSmallIcon(R.drawable.icon) // Your notification icon
+                    .setContentTitle("Budget Exceeded")
+                    .setContentText("Your spending has exceeded the budget limit!")
+                    .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(1, builder.build());
         }
     }
 }

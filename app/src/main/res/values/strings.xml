@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Track-Mate</string>
+<string-array name="filter_options">
+    <item>Last Week</item>
+    <item>Last 30 Days</item>
+    <item>All Data</item>
+</string-array>
 </resources>

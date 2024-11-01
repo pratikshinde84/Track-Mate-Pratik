@@ -40,7 +40,6 @@ public class SetBudgetActivity extends AppCompatActivity {
         String budgetInput = editTextBudget.getText().toString().trim();
 
         if (budgetInput.isEmpty()) {
-            // If the input is empty, show a Toast message
             Toast.makeText(SetBudgetActivity.this, "Please enter a budget amount", Toast.LENGTH_SHORT).show();
         } else {
             // Convert the input to a number and store it in SharedPreferences
@@ -50,7 +49,6 @@ public class SetBudgetActivity extends AppCompatActivity {
             // Show a Toast message
             Toast.makeText(SetBudgetActivity.this, "Budget set to: ₹" + budgetAmount, Toast.LENGTH_LONG).show();
 
-            // Redirect to HomeActivity after a short delay
             redirectToHome();
         }
     }
@@ -72,15 +70,14 @@ public class SetBudgetActivity extends AppCompatActivity {
     }
 
     private void redirectToHome() {
-        // Use a Handler to introduce a delay before redirecting
         new android.os.Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(SetBudgetActivity.this, HomeActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                finish(); // Finish this activity so the user can't return to it
+                finish();
             }
-        }, 2000); // Delay of 2 seconds
+        }, 500);
     }
 }

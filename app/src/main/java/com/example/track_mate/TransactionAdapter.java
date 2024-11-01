@@ -10,41 +10,37 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder> {
+public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolder> {
 
-    private final List<String> transactionList;
+    private List<String> transactions;
 
-    public TransactionAdapter(List<String> transactionList) {
-        this.transactionList = transactionList;
+    public TransactionAdapter(List<String> transactions) {
+        this.transactions = transactions;
     }
 
     @NonNull
     @Override
-    public TransactionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_transaction, parent, false);
-        return new TransactionViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
-        holder.bind(transactionList.get(position));
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.transactionText.setText(transactions.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return transactionList.size();
+        return transactions.size();
     }
 
-    static class TransactionViewHolder extends RecyclerView.ViewHolder {
-        private final TextView transactionTextView;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView transactionText;
 
-        public TransactionViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            transactionTextView = itemView.findViewById(R.id.transactionTextView); // Ensure you have this TextView in your item layout
-        }
-
-        public void bind(String transactionDetail) {
-            transactionTextView.setText(transactionDetail);
+            transactionText = itemView.findViewById(R.id.transactionText);
         }
     }
 }
